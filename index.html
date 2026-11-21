@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KNIME Study Buddy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">KNIME <span>Study Buddy</span></a>
+  <div class="links">
+    <a class="active" href="index.html">Home</a>
+    <a href="about.html">How It Works</a>
+  </div>
+</nav>
+
+<!-- AI-generated video: autoplays on a loop (muted + playsinline so browsers allow autoplay) -->
+<header class="hero">
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <div class="hero-text">
+    <h1>Stuck on a KNIME node at 2 a.m.? <span>Ask Study Buddy.</span></h1>
+    <p>A 24/7 AI tutor for business analytics students. It gives you KNIME steps, not Python code, and explains every metric in plain business language.</p>
+    <div>
+      <a class="btn" href="about.html">See How It Works &rarr;</a>
+      <a class="btn ghost" href="#" data-open-chat>Chat Now</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>Why students use it</h2>
+  <p class="sub">General chatbots answer with Python or Excel. Study Buddy only answers from course notes, so the steps match what you actually do in class.</p>
+  <div class="cards">
+    <div class="card"><div class="icon">🧩</div><h3>Node-by-node steps</h3><p>Ask "how do I build a kNN model?" and get the exact nodes in order with recommended settings.</p></div>
+    <div class="card"><div class="icon">📊</div><h3>Metrics explained</h3><p>AUC, precision, recall, Cohen's kappa: a definition, the formula, and what it means for the business.</p></div>
+    <div class="card"><div class="icon">✅</div><h3>Submission checklist</h3><p>One click gives you a checklist so your .knwf export is clean and ready to turn in.</p></div>
+    <div class="card"><div class="icon">🛑</div><h3>No made-up answers</h3><p>If something isn't in the notes, like due dates or grades, it tells you to check Canvas instead of guessing.</p></div>
+  </div>
+</section>
+
+<!-- X-FACTOR: interactive KNIME workflow simulator -->
+<section>
+  <h2>Try it: run a KNIME workflow</h2>
+  <p class="sub">Pick a task and watch the workflow build and execute, with the same red / yellow / green traffic lights you see in KNIME.</p>
+  <div class="sim">
+    <div class="sim-controls" id="tasks"></div>
+    <div class="flow" id="flow"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <p class="xfactor"><b>X-Factor:</b> The interactive workflow simulator above lets visitors pick a business problem and watch a KNIME workflow build itself node by node, with traffic-light status and a final result, so they see what Study Buddy teaches before opening the chatbot.</p>
+</section>
+
+<footer>Jason Wang &middot; ITOM 6267 Lab 5 &middot; Class project, not a real company. Chatbot built in Chatling (Lab 3).</footer>
+
+<script src="chat.js"></script>
+<script>
+const TASKS = {
+  "Predict churn (kNN)": {
+    nodes: [["📄","CSV Reader"],["🧹","Missing Value"],["📏","Normalizer"],["✂️","Table Partitioner"],["🎯","K Nearest Neighbor"],["📈","Scorer"]],
+    result: "Done! Accuracy 0.86, AUC 0.84. Study Buddy tip: churners are only 15% of customers, so check recall, not just accuracy."
+  },
+  "Approve loans (Decision Tree)": {
+    nodes: [["📄","CSV Reader"],["🔢","Number To String"],["✂️","Table Partitioner"],["🌳","Decision Tree Learner"],["🔮","Decision Tree Predictor"],["📈","Scorer"]],
+    result: "Done! Accuracy 0.81. Study Buddy tip: the top split is credit history, which is the easiest rule to explain to a loan manager."
+  },
+  "Segment customers (k-Means)": {
+    nodes: [["📄","CSV Reader"],["🧽","Column Filter"],["📏","Normalizer"],["🎛️","k-Means"],["🧮","GroupBy"],["🎨","Scatter Plot"]],
+    result: "Done! 4 segments found. Study Buddy tip: name each cluster by its averages (e.g. \"high spend, low visits\") so marketing can act on it."
+  }
+};
+
+const tasksEl = document.getElementById("tasks");
+const flowEl = document.getElementById("flow");
+const resultEl = document.getElementById("result");
+let timers = [];
+
+function run(name) {
+  timers.forEach(clearTimeout); timers = [];
+  [...tasksEl.children].forEach(b => b.classList.toggle("on", b.textContent === name));
+  flowEl.innerHTML = ""; resultEl.className = "result";
+  const t = TASKS[name];
+  const nodes = t.nodes.map(([icon, label], i) => {
+    if (i) { const a = document.createElement("span"); a.className = "arrow"; a.textContent = "➜"; flowEl.append(a); }
+    const n = document.createElement("div");
+    n.className = "node idle";
+    n.innerHTML = `<div class="box">${icon}</div><div class="name">${label}</div><div class="light"><i></i><i></i><i></i></div>`;
+    flowEl.append(n);
+    return n;
+  });
+  // 1) nodes appear one by one (red = not configured)
+  nodes.forEach((n, i) => timers.push(setTimeout(() => {
+    n.classList.add("show");
+    if (n.previousElementSibling) n.previousElementSibling.classList.add("show");
+  }, i * 250)));
+  // 2) execute: yellow then green, left to right
+  const start = nodes.length * 250 + 300;
+  nodes.forEach((n, i) => {
+    timers.push(setTimeout(() => n.className = "node show run", start + i * 550));
+    timers.push(setTimeout(() => n.className = "node show done", start + i * 550 + 450));
+  });
+  timers.push(setTimeout(() => { resultEl.textContent = t.result; resultEl.className = "result show"; }, start + nodes.length * 550 + 300));
+}
+
+Object.keys(TASKS).forEach(name => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.textContent = name; b.onclick = () => run(name);
+  tasksEl.append(b);
+});
+run(Object.keys(TASKS)[0]);
+</script>
+</body>
+</html>

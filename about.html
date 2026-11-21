@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works | KNIME Study Buddy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">KNIME <span>Study Buddy</span></a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a class="active" href="about.html">How It Works</a>
+  </div>
+</nav>
+
+<div class="page-head">
+  <h1>How Study Buddy Works</h1>
+  <p class="sub">The problem, the idea, and what's under the hood.</p>
+</div>
+
+<section class="prose" style="padding-top:0">
+  <h2>The problem</h2>
+  <p>In business analytics classes, most homework is built in KNIME. The hard part usually isn't the concept, it's knowing which node to use, which settings to pick, and how to explain a result like AUC to a manager. That usually happens late at night when office hours are closed. When students ask a general AI chatbot, they get Python or Excel answers that don't match the tool they're graded on.</p>
+
+  <h2>The idea</h2>
+  <p>KNIME Study Buddy is a chatbot trained only on course study notes. It answers in KNIME steps, explains metrics in business terms, and refuses to guess about things it doesn't know, like due dates or grades. The goal is to get students unstuck in a couple of minutes instead of an hour of searching forums.</p>
+
+  <h2>How a conversation works</h2>
+  <ol class="steps">
+    <li><b>Pick a topic or type a question.</b> The bot opens with four buttons: Build a model, Explain a metric, Submission checklist, or Ask my own question.</li>
+    <li><b>It searches the knowledge base.</b> The bot looks through my study notes (decision trees, kNN, logistic regression, k-Means, evaluation, data prep) and two FAQ entries.</li>
+    <li><b>It answers in a fixed format.</b> "How do I" questions get numbered node-by-node steps. Metric questions get a definition, the formula, and a one-line business meaning.</li>
+    <li><b>It suggests a next step.</b> Every answer ends with a follow-up idea, then loops back so you can keep asking.</li>
+  </ol>
+
+  <h2>Who it's for</h2>
+  <table>
+    <tr><th>User</th><th>What they get</th></tr>
+    <tr><td>Grad students in analytics courses</td><td>Fast, KNIME-specific help any time of day</td></tr>
+    <tr><td>Instructors / TAs</td><td>Fewer repeat questions about basic node settings</td></tr>
+    <tr><td>Universities</td><td>A cheap way to add 24/7 tutoring to a course</td></tr>
+  </table>
+
+  <h2>Business model</h2>
+  <p>Free for individual students with a monthly question limit. Universities pay a per-course license so instructors can upload their own notes and the bot matches their exact syllabus. Since the knowledge base is just documents and FAQs, adding a new course takes about an hour.</p>
+
+  <h2>Try it</h2>
+  <p>Open the chat bubble in the bottom-right corner and try one of these:</p>
+  <ul>
+    <li>"I'm building a kNN model to predict churn. What nodes do I need, and how should I choose k?"</li>
+    <li>"My model is 90% accurate but only 10% of customers churn. Is that good?"</li>
+    <li>"When is HW4 due?" (it should tell you to check Canvas instead of guessing)</li>
+  </ul>
+  <p><a class="btn" href="#" data-open-chat>Open the chatbot</a> <a class="btn ghost" href="index.html">&larr; Back home</a></p>
+</section>
+
+<footer>Jason Wang &middot; ITOM 6267 Lab 5 &middot; Class project, not a real company. Chatbot built in Chatling (Lab 3).</footer>
+
+<script src="chat.js"></script>
+</body>
+</html>
